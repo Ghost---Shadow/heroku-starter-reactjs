@@ -2,7 +2,7 @@ import { Formik, Field, Form } from 'formik';
 import PropTypes from 'prop-types';
 
 function SignupBody({ signup }) {
-  const onFormSubmit = async (values) => {
+  const onSignup = async (values) => {
     // TODO: Handle errors
     const response = await signup(values);
 
@@ -11,7 +11,7 @@ function SignupBody({ signup }) {
   };
 
   return (
-    <Formik initialValues={{ email: '', password: '', name: '' }} onSubmit={onFormSubmit}>
+    <Formik initialValues={{ email: '', password: '', name: '' }} onSubmit={onSignup}>
       <Form>
         <Field type="email" name="email" />
         <Field type="password" name="password" />

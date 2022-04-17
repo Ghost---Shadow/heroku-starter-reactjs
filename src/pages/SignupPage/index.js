@@ -1,7 +1,8 @@
 import SignupBody from './components/SignupBody';
+import { signup } from './api';
 
 function SignupPage() {
-  return <SignupBody />;
+  return <SignupBody signup={signup} />;
 }
 
 export default SignupPage;

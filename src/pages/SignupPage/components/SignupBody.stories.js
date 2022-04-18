@@ -1,4 +1,5 @@
 import React from 'react';
+import { HTTPError } from 'ky';
 
 import SignupBody from './SignupBody';
 
@@ -13,4 +14,11 @@ function Template(args) {
 }
 
 export const Normal = Template.bind({});
-Normal.args = {};
+Normal.args = {
+  signup: async (...p) => { console.log(...p); return new Response({ message: 'yes' }); },
+};
+
+export const Unauthorized = Template.bind({});
+Unauthorized.args = {
+  signup: async () => { throw new HTTPError({ json: async () => ({ message: 'User already exists' }), status: 400 }); },
+};

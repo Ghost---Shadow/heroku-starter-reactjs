@@ -7,6 +7,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<DashBoardPage />} />
+      <Route path="/user" element={<DashBoardPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/login" element={<LoginPage />} />
     </Routes>

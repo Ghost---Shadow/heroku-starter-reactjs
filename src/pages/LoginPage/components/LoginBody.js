@@ -2,11 +2,14 @@ import { Stack, Text, Title } from '@mantine/core';
 import { Formik, Form } from 'formik';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SubmitButton from '../../../components/Fields/SubmitButton';
 import TextField from '../../../components/Fields/TextField';
+import { ROUTES } from '../../../config';
 
 function LoginBody({ login }) {
   const [error, setError] = useState();
+  const navigate = useNavigate();
 
   const onLogin = async (values) => {
     setError('');
@@ -14,7 +17,7 @@ function LoginBody({ login }) {
     try {
       await login(values);
 
-      // TODO: Navigate to dashboard
+      navigate(`/${ROUTES.USER}`, { replace: true });
     } catch (e) {
       const errorBody = await e.response.json();
       setError(errorBody.message);
@@ -32,8 +35,8 @@ function LoginBody({ login }) {
           }}
           >
             <Title order={1} align="center">Login</Title>
-            <TextField type="email" name="email" />
-            <TextField type="password" name="password" />
+            <TextField type="email" name="email" placeholder="email" />
+            <TextField type="password" name="password" placeholder="password" />
             <SubmitButton>Submit</SubmitButton>
             {error && <Text color="red">{error}</Text>}
           </Stack>

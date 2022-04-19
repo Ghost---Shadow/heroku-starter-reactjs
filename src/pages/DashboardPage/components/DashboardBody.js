@@ -1,18 +1,9 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import useAsync from '../../../utils/useAsync';
 
 function DashboardBody({ getUserInfo }) {
-  const [userInfo, setUserInfo] = useState(null);
-
-  useEffect(() => {
-    const inner = async () => {
-      const response = await getUserInfo();
-      setUserInfo(response);
-    };
-    inner();
-  }, []);
-
-  if (userInfo === null) return <div>Loading</div>;
+  const [userInfo, userInfoLoading] = useAsync(getUserInfo);
+  if (userInfoLoading) return <div>Loading</div>;
 
   return <div>{JSON.stringify(userInfo)}</div>;
 }

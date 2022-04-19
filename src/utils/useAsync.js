@@ -1,27 +1,24 @@
 import { useEffect, useState } from 'react';
 
 const useAsync = (fn) => {
-  const [response, setResponse] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(null);
+  // [response, loading, error]
+  const [triplet, setTriplet] = useState([null, null, null]);
 
   useEffect(() => {
     const inner = async () => {
-      setLoading(true);
+      setTriplet([null, true, null]);
       try {
         const res = await fn();
-        setResponse(res);
-        setLoading(false);
+        setTriplet([res, false, null]);
       } catch (e) {
-        const errorBody = await e.response.json();
-        setError(errorBody);
-        setLoading(false);
+        const errorBody = e.response;
+        setTriplet([null, false, errorBody]);
       }
     };
     inner();
-  }, []);
+  }, [fn]);
 
-  return [response, loading, error];
+  return triplet;
 };
 
 export default useAsync;

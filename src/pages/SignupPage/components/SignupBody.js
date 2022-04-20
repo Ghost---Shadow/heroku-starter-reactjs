@@ -33,7 +33,7 @@ function SignupBody({ signup }) {
           >
             <Title order={1} align="center">Signup</Title>
             <TextField type="name" name="name" placeholder="name" />
-            <TextField type="email" name="email" placeholder="email" />
+            <TextField type="text" name="email" placeholder="email" />
             <TextField type="password" name="password" placeholder="password" />
             <SubmitButton>Signup</SubmitButton>
             {error && <Text color="red">{error}</Text>}

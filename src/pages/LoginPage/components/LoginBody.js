@@ -35,7 +35,7 @@ function LoginBody({ login }) {
           }}
           >
             <Title order={1} align="center">Login</Title>
-            <TextField type="email" name="email" placeholder="email" />
+            <TextField type="text" name="email" placeholder="email" />
             <TextField type="password" name="password" placeholder="password" />
             <SubmitButton>Submit</SubmitButton>
             {error && <Text color="red">{error}</Text>}

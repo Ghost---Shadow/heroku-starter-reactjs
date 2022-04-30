@@ -48,6 +48,17 @@ const adRegistry = [
   },
 ];
 
+const initCookies = () => {
+  adRegistry.forEach((ad) => {
+    if (checkLocalStorageFlag(ad.key)) {
+      ad.init();
+    }
+  });
+};
+
+// Run EXACTLY once.
+initCookies();
+
 function CookieBanner() {
   const [hideCookieBanner, setHideCookieBanner] = useState(
     checkLocalStorageFlag(COOKIE_KEYS.HIDE_COOKIE_BANNER),
@@ -64,18 +75,6 @@ function CookieBanner() {
     setHideCookieBanner(value);
     localStorage.setItem(COOKIE_KEYS.HIDE_COOKIE_BANNER, value);
   };
-
-  const initCookies = () => {
-    adRegistry.forEach((ad) => {
-      if (checkLocalStorageFlag(ad.key)) {
-        ad.init();
-      }
-    });
-  };
-
-  useEffect(() => {
-    initCookies();
-  }, []);
 
   const onAcceptSelected = () => {
     setHideCookieBannerWrapper(true);

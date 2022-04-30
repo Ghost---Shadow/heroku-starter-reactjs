@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 const COOKIE_KEYS = {
   HIDE_COOKIE_BANNER: 'HIDE_COOKIE_BANNER',
   TWITTER_TRACKING_ACCEPTED: 'TWITTER_TRACKING_ACCEPTED',
-  SWITTER_TRACKING_ACCEPTED: 'SWITTER_TRACKING_ACCEPTED',
+  LINKEDIN_TRACKING_ACCEPTED: 'LINKEDIN_TRACKING_ACCEPTED',
 };
 
 /* eslint-disable */
@@ -23,15 +23,21 @@ const initTwitterTracking = () => {
 /* eslint-enable */
 
 /* eslint-disable */
-const initSwitterTracking = () => {
-  !(function (e, t, n, s, u, a) {
-    e.twq || (s = e.twq = function () {
-      s.exe ? s.exe.apply(s, arguments) : s.queue.push(arguments);
-    }, s.version = '1.1', s.queue = [], u = t.createElement(n), u.async = !0, u.src = '//static.ads-twitter.com/uwt.js',
-      a = t.getElementsByTagName(n)[0], a.parentNode.insertBefore(u, a));
-  }(window, document, 'script'));
-  twq('init', 'tomato');
-  twq('track', 'PageView');
+const initLinkedinTracking = () => {
+  let _linkedin_partner_id = 'tomato';
+  window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+  window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+  (function (l) {
+    if (!l) {
+      window.lintrk = function (a, b) { window.lintrk.q.push([a, b]); };
+      window.lintrk.q = [];
+    }
+    const s = document.getElementsByTagName('script')[0];
+    const b = document.createElement('script');
+    b.type = 'text/javascript'; b.async = true;
+    b.src = 'https://snap.licdn.com/li.lms-analytics/insight.min.js';
+    s.parentNode.insertBefore(b, s);
+  }(window.lintrk));
 };
 /* eslint-enable */
 
@@ -43,8 +49,8 @@ const adRegistry = [
     init: initTwitterTracking,
   },
   {
-    key: COOKIE_KEYS.SWITTER_TRACKING_ACCEPTED,
-    init: initSwitterTracking,
+    key: COOKIE_KEYS.LINKEDIN_TRACKING_ACCEPTED,
+    init: initLinkedinTracking,
   },
 ];
 
@@ -144,18 +150,18 @@ function CookieBanner() {
                 )}
               />
               <Checkbox
-                checked={acceptanceLut[COOKIE_KEYS.SWITTER_TRACKING_ACCEPTED]}
-                label="Switter"
+                checked={acceptanceLut[COOKIE_KEYS.LINKEDIN_TRACKING_ACCEPTED]}
+                label="LinkedIn"
                 onChange={(e) => updateAcceptanceLut(
-                  COOKIE_KEYS.SWITTER_TRACKING_ACCEPTED,
+                  COOKIE_KEYS.LINKEDIN_TRACKING_ACCEPTED,
                   e.currentTarget.checked,
                 )}
               />
             </Stack>
           </Group>
           <Stack align="stretch">
-            <Button onClick={onAcceptSelected}>Accept Selected</Button>
             <Button onClick={onAcceptAll}>Accept All</Button>
+            <Button onClick={onAcceptSelected}>Accept Selected</Button>
           </Stack>
         </Group>
       </Stack>

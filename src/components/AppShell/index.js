@@ -1,5 +1,6 @@
 import { AppShell, Header } from '@mantine/core';
 import PropTypes from 'prop-types';
+import CookieBanner from '../CookieBanner';
 
 function CustomAppShell({ children }) {
   return (
@@ -10,6 +11,7 @@ function CustomAppShell({ children }) {
         main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
       })}
     >
+      <CookieBanner />
       {children}
     </AppShell>
   );

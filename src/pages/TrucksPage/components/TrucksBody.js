@@ -1,5 +1,6 @@
 import {
-  Button, NumberInput, Group, Stack, Text,
+  Button, NumberInput, Group, Stack,
+  Notification,
 } from '@mantine/core';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -103,16 +104,16 @@ function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocat
           Get User Location
         </Button>
       </Group>
-      {error && (
-        <Group>
-          <Text color="red">{error}</Text>
-        </Group>
-      )}
       <ResultsTable
         foodTrucks={foodTrucks}
         isLoading={isLoading}
         searchedAtLeastOnce={searchedAtLeastOnce}
       />
+      {error && (
+        <Notification title="Error" color="red" onClose={() => setError('')}>
+          {error}
+        </Notification>
+      )}
     </Stack>
   );
 }

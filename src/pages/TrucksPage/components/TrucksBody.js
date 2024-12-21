@@ -1,5 +1,5 @@
 import {
-  Button, TextInput, Table, NumberInput, Group, Stack, Loader, Center, Text,
+  Button, Table, NumberInput, Group, Stack, Loader, Center, Text,
 } from '@mantine/core';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -58,17 +58,19 @@ function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocat
   return (
     <Stack>
       <Group grow>
-        <TextInput
+        <NumberInput
           label="Latitude"
           placeholder="Enter latitude"
-          value={latitude}
-          onChange={(event) => setLatitude(event.currentTarget.value)}
+          value={latitude ? parseFloat(latitude) : undefined}
+          onChange={(val) => setLatitude(val ? val.toString() : '')}
+          precision={6}
         />
-        <TextInput
+        <NumberInput
           label="Longitude"
           placeholder="Enter longitude"
-          value={longitude}
-          onChange={(event) => setLongitude(event.currentTarget.value)}
+          value={longitude ? parseFloat(longitude) : undefined}
+          onChange={(val) => setLongitude(val ? val.toString() : '')}
+          precision={6}
         />
         <NumberInput
           label="Radius in km"

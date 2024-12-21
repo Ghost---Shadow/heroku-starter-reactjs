@@ -1,4 +1,5 @@
 import React from 'react';
+import { HTTPError } from 'ky';
 
 import TrucksBody from './TrucksBody';
 
@@ -56,6 +57,7 @@ const sampleResponse = {
     },
   ],
 };
+const defaultCoords = [35.17370598710992, -114.00505988023178];
 
 function Template(args) {
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -66,5 +68,19 @@ export const Normal = Template.bind({});
 Normal.args = {
   getFoodTrucksNearbyFast: () => Promise.resolve(sampleResponse),
   getFoodTrucksNearby: () => Promise.resolve(sampleResponse),
-  getUserLocation: () => Promise.resolve([35.17370598710992, -114.00505988023178]),
+  getUserLocation: () => Promise.resolve(defaultCoords),
+};
+
+export const SearchFails = Template.bind({});
+SearchFails.args = {
+  getFoodTrucksNearbyFast: async () => { throw new HTTPError({ json: async () => ({ message: 'Internal Server Error' }), status: 500 }); },
+  getFoodTrucksNearby: async () => { throw new HTTPError({ json: async () => ({ message: 'Internal Server Error' }), status: 500 }); },
+  getUserLocation: () => Promise.resolve(defaultCoords),
+};
+
+export const LocationFails = Template.bind({});
+LocationFails.args = {
+  getFoodTrucksNearbyFast: () => Promise.resolve(sampleResponse),
+  getFoodTrucksNearby: () => Promise.resolve(sampleResponse),
+  getUserLocation: () => Promise.reject(new Error('Geolocation is not supported by this browser.')),
 };

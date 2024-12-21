@@ -9,7 +9,7 @@ function ResultsTable({ foodTrucks, searchedAtLeastOnce, isLoading }) {
       <td>{truck.applicant}</td>
       <td>{truck.coordinates.latitude.toFixed(6)}</td>
       <td>{truck.coordinates.longitude.toFixed(6)}</td>
-      <td>{(truck.distance / 1000).toFixed(2)}</td>
+      <td>{(truck.distance).toFixed(2)}</td>
     </tr>
   ));
 

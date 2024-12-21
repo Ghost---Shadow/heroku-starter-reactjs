@@ -1,8 +1,9 @@
 import {
-  Button, Table, NumberInput, Group, Stack, Loader, Center, Text,
+  Button, NumberInput, Group, Stack, Text,
 } from '@mantine/core';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import ResultsTable from './ResultsTable';
 
 function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocation }) {
   const [latitude, setLatitude] = useState('');
@@ -12,6 +13,7 @@ function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocat
   const [foodTrucks, setFoodTrucks] = useState([]);
   const [isLoading, setIsLoading] = useState(false); // State to track general loading status
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+  const [searchedAtLeastOnce, setSearchedAtLeastOnce] = useState(false);
   const [error, setError] = useState('');
 
   const handleSearch = async (fast = false) => {
@@ -23,6 +25,7 @@ function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocat
       });
       setFoodTrucks(result.closest_food_trucks);
       setError('');
+      setSearchedAtLeastOnce(true);
     } catch (err) {
       setError(err.message || err.toString());
     }
@@ -43,15 +46,6 @@ function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocat
     }
     setIsLoadingLocation(false); // Stop loading
   };
-
-  const rows = foodTrucks.map((truck) => (
-    <tr key={truck.locationid}>
-      <td>{truck.applicant}</td>
-      <td>{truck.coordinates.latitude}</td>
-      <td>{truck.coordinates.longitude}</td>
-      <td>{truck.distance}</td>
-    </tr>
-  ));
 
   const isSearchButtonDisabled = !(latitude && longitude);
 
@@ -114,23 +108,11 @@ function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocat
           <Text color="red">{error}</Text>
         </Group>
       )}
-      {isLoading ? (
-        <Center style={{ height: 200 }}>
-          <Loader />
-        </Center>
-      ) : (
-        <Table>
-          <thead>
-            <tr>
-              <th>Applicant</th>
-              <th>Latitude</th>
-              <th>Longitude</th>
-              <th>Distance (km)</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </Table>
-      )}
+      <ResultsTable
+        foodTrucks={foodTrucks}
+        isLoading={isLoading}
+        searchedAtLeastOnce={searchedAtLeastOnce}
+      />
     </Stack>
   );
 }

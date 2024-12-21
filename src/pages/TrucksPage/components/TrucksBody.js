@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocation }) {
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
-  const [radius, setRadius] = useState(8000); // default radius
+  const [radius, setRadius] = useState(5); // default radius
   const [limit, setLimit] = useState(5); // default limit
   const [foodTrucks, setFoodTrucks] = useState([]);
   const [isLoading, setIsLoading] = useState(false); // State to track general loading status

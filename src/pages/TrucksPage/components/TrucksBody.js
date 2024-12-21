@@ -104,16 +104,16 @@ function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocat
           Get User Location
         </Button>
       </Group>
-      <ResultsTable
-        foodTrucks={foodTrucks}
-        isLoading={isLoading}
-        searchedAtLeastOnce={searchedAtLeastOnce}
-      />
       {error && (
         <Notification title="Error" color="red" onClose={() => setError('')}>
           {error}
         </Notification>
       )}
+      <ResultsTable
+        foodTrucks={foodTrucks}
+        isLoading={isLoading}
+        searchedAtLeastOnce={searchedAtLeastOnce}
+      />
     </Stack>
   );
 }

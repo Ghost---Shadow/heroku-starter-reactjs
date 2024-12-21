@@ -32,6 +32,8 @@ function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocat
   const handleFetchUserLocation = async () => {
     setIsLoadingLocation(true); // Start loading for location fetch
     try {
+      setLatitude('');
+      setLongitude('');
       const [nextLatitude, nextLongitude] = await getUserLocation();
       setLatitude(nextLatitude);
       setLongitude(nextLongitude);
@@ -50,6 +52,8 @@ function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocat
       <td>{truck.distance}</td>
     </tr>
   ));
+
+  const isSearchButtonDisabled = !(latitude && longitude);
 
   return (
     <Stack>
@@ -82,8 +86,20 @@ function TrucksBody({ getFoodTrucksNearby, getFoodTrucksNearbyFast, getUserLocat
         />
       </Group>
       <Group position="right">
-        <Button onClick={() => handleSearch(false)} loading={isLoading}>Search</Button>
-        <Button onClick={() => handleSearch(true)} loading={isLoading}>Search Fast</Button>
+        <Button
+          disabled={isSearchButtonDisabled}
+          onClick={() => handleSearch(false)}
+          loading={isLoading}
+        >
+          Search
+        </Button>
+        <Button
+          disabled={isSearchButtonDisabled}
+          onClick={() => handleSearch(true)}
+          loading={isLoading}
+        >
+          Search Fast
+        </Button>
         <Button
           onClick={handleFetchUserLocation}
           loading={isLoadingLocation}

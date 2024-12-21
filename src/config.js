@@ -13,4 +13,6 @@ export const ROUTES = {
   SIGNUP: 'signup',
   LOGIN: 'login',
   USER: 'user',
+  FOOD_TRUCKS: 'food-trucks',
+  FOOD_TRUCKS_FAST: 'food-trucks-postgis',
 };

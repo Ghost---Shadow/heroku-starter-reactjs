@@ -5,7 +5,7 @@ export const BACKENDS = {
     FLASK_SERVER: 'http://localhost:5002',
   },
   production: {
-    FLASK_SERVER: 'TODO',
+    FLASK_SERVER: 'http://localhost/api',
   },
 }[ENVIRONMENT];
 

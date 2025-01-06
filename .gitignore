@@ -24,3 +24,5 @@ yarn-error.log*
 
 # Project specific
 todo
+
+*storybook.log

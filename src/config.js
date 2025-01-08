@@ -5,7 +5,7 @@ export const BACKENDS = {
     FLASK_SERVER: 'http://localhost:5002',
   },
   production: {
-    FLASK_SERVER: 'http://localhost/api',
+    FLASK_SERVER: 'https://api.cluster.ad-absurdum.me',
   },
 }[ENVIRONMENT];
 

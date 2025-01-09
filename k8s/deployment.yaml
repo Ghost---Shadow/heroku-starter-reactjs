@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: gke-starter-reactjs
-        image: us-central1-docker.pkg.dev/starter-project-447001/starter-project/gke-starter-reactjs:latest
+        image: <IMAGE_PLACEHOLDER>
         ports:
         - containerPort: 80

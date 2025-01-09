@@ -32,13 +32,10 @@ jobs:
         # Get the GKE credentials so we can deploy to the cluster
     
     - name: Get GKE credentials
-      uses: google-github-actions/get-gke-credentials@db150f2cc60d1716e61922b832eae71d2a45938f
+      uses: google-github-actions/get-gke-credentials@v2
       with:
         cluster_name: ${{ vars.GKE_CLUSTER }}
         location: ${{ vars.GKE_ZONE }}
-        project_id: ${{ vars.GKE_PROJECT }}
-        credentials: ${{ secrets.GKE_SA_KEY }}
-        run: echo "GKE credentials acquired."
 
     # Build the Docker image
     - name: Build and push Docker image

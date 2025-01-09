@@ -15,13 +15,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Setup gcloud CLI
-    - name: Setup gcloud CLI
-      uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
+    - name: 'auth'
+      uses: 'google-github-actions/auth@v2'
       with:
-        service_account_key: ${{ secrets.GKE_SA_KEY }}
         project_id: ${{ vars.GKE_PROJECT }}
-        run: echo "gcloud CLI configured."
+        credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
 
     # Configure Docker to use the gcloud command-line tool as a credential helper for authentication
     - name: Configure Docker credentials
@@ -29,15 +30,12 @@ jobs:
         gcloud --quiet auth configure-docker
         echo "Docker configured to use gcloud as a credential helper."
 
-        # Get the GKE credentials so we can deploy to the cluster
-    
+    # Get the GKE credentials so we can deploy to the cluster
     - name: Get GKE credentials
       uses: google-github-actions/get-gke-credentials@v2
       with:
         cluster_name: ${{ vars.GKE_CLUSTER }}
         location: ${{ vars.GKE_ZONE }}
-        project_id: ${{ vars.GKE_PROJECT }}
-        credentials: ${{ secrets.GKE_SA_KEY }}
 
     # Build the Docker image
     - name: Build and push Docker image

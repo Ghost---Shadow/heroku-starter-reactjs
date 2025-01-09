@@ -1,0 +1,70 @@
+name: Build and Deploy to GKE
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  PROJECT_ID: ${{ env.GKE_PROJECT }}
+  GKE_CLUSTER: ${{ env.GKE_CLUSTER }}
+  DEPLOYMENT_NAME: ${{ github.repository }}
+  GKE_ZONE: ${{ env.GKE_ZONE }}
+  IMAGE_TAG: ${{ env.BASE_IMAGE_TAG }}/${{ github.repository }}:${{ github.sha }}
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Setup gcloud CLI
+    - name: Setup gcloud CLI
+      uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
+      with:
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ env.PROJECT_ID }}
+        run: echo "gcloud CLI configured."
+
+    # Configure Docker to use the gcloud command-line tool as a credential helper for authentication
+    - name: Configure Docker credentials
+      run: |
+        gcloud --quiet auth configure-docker
+        echo "Docker configured to use gcloud as a credential helper."
+
+        # Get the GKE credentials so we can deploy to the cluster
+        - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@db150f2cc60d1716e61922b832eae71d2a45938f
+        with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+        credentials: ${{ secrets.GKE_SA_KEY }}
+        run: echo "GKE credentials acquired."
+
+    # Build the Docker image
+    - name: Build and push Docker image
+      run: |
+        echo "Building Docker image with tag: ${{ env.IMAGE_TAG }}"
+        docker build -t ${{ env.IMAGE_TAG }} .
+        echo "Docker image built."
+        echo "Pushing Docker image to registry."
+        docker push ${{ env.IMAGE_TAG }}
+        echo "Docker image pushed."
+
+    # Deploy the Docker image to the GKE cluster
+    - name: Deploy to GKE
+      run: |
+        echo "Setting new image in the Kubernetes deployment."
+        kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} *=${{ env.IMAGE_TAG }}
+        echo "Applying Kubernetes configurations."
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/service.yaml
+        echo "Kubernetes configurations applied."
+        echo "Checking rollout status."
+        kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
+        kubectl get services -o wide
+        echo "Deployment complete."

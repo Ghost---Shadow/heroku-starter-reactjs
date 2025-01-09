@@ -1,5 +1,5 @@
-# heroku-starter-reactjs
+# gke-starter-reactjs
 
-Heroku starter app for reactjs
+GKE starter app for reactjs
 
 WORK IN PROGRESS

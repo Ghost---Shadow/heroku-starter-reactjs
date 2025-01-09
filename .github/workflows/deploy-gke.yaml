@@ -49,13 +49,11 @@ jobs:
     - name: Deploy to GKE
       run: |
         export IMAGE_TAG=${{ vars.BASE_IMAGE_TAG }}/${{ github.repository }}:${{ github.sha }}
-        echo "Setting new image in the Kubernetes deployment."
-        kubectl set image deployment/${{ github.repository }} *=$IMAGE_TAG
-        echo "Applying Kubernetes configurations."
+        echo $IMAGE_TAG
+        sed -i "s|<IMAGE_PLACEHOLDER>|$IMAGE_TAG|g" k8s/deployment.yaml
+
+        # Apply the deployment and service to the cluster
         kubectl apply -f k8s/deployment.yaml
         kubectl apply -f k8s/service.yaml
-        echo "Kubernetes configurations applied."
-        echo "Checking rollout status."
+
         kubectl rollout status deployment/${{ github.repository }}
-        kubectl get services -o wide
-        echo "Deployment complete."

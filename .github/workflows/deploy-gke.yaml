@@ -24,12 +24,6 @@ jobs:
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
 
-    # Configure Docker to use the gcloud command-line tool as a credential helper for authentication
-    - name: Configure Docker credentials
-      run: |
-        gcloud --quiet auth configure-docker
-        echo "Docker configured to use gcloud as a credential helper."
-
     # Get the GKE credentials so we can deploy to the cluster
     - name: Get GKE credentials
       uses: google-github-actions/get-gke-credentials@v2
@@ -40,6 +34,9 @@ jobs:
     # Build the Docker image
     - name: Build and push Docker image
       run: |
+        gcloud auth configure-docker us-central1-docker.pkg.dev
+        gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+        
         export IMAGE_TAG=${{ vars.BASE_IMAGE_TAG }}/${{ github.repository }}:${{ github.sha }}
         echo "Building Docker image with tag: $IMAGE_TAG"
         docker build -t $IMAGE_TAG .

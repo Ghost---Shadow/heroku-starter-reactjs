@@ -20,7 +20,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
       with:
         service_account_key: ${{ secrets.GKE_SA_KEY }}
-        project_id: ${{ env.GKE_PROJECT }}
+        project_id: ${{ vars.GKE_PROJECT }}
         run: echo "gcloud CLI configured."
 
     # Configure Docker to use the gcloud command-line tool as a credential helper for authentication
@@ -34,15 +34,15 @@ jobs:
     - name: Get GKE credentials
       uses: google-github-actions/get-gke-credentials@db150f2cc60d1716e61922b832eae71d2a45938f
       with:
-        cluster_name: ${{ env.GKE_CLUSTER }}
-        location: ${{ env.GKE_ZONE }}
+        cluster_name: ${{ vars.GKE_CLUSTER }}
+        location: ${{ vars.GKE_ZONE }}
         credentials: ${{ secrets.GKE_SA_KEY }}
         run: echo "GKE credentials acquired."
 
     # Build the Docker image
     - name: Build and push Docker image
       run: |
-        export IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}/${{ github.repository }}:${{ github.sha }}
+        export IMAGE_TAG=${{ vars.BASE_IMAGE_TAG }}/${{ github.repository }}:${{ github.sha }}
         echo "Building Docker image with tag: $IMAGE_TAG"
         docker build -t $IMAGE_TAG .
         echo "Docker image built."
@@ -53,7 +53,7 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy to GKE
       run: |
-        export IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}/${{ github.repository }}:${{ github.sha }}
+        export IMAGE_TAG=${{ vars.BASE_IMAGE_TAG }}/${{ github.repository }}:${{ github.sha }}
         echo "Setting new image in the Kubernetes deployment."
         kubectl set image deployment/${{ github.repository }} *=$IMAGE_TAG
         echo "Applying Kubernetes configurations."

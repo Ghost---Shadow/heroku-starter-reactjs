@@ -37,6 +37,7 @@ jobs:
         cluster_name: ${{ vars.GKE_CLUSTER }}
         location: ${{ vars.GKE_ZONE }}
         project_id: ${{ vars.GKE_PROJECT }}
+        credentials: ${{ secrets.GKE_SA_KEY }}
 
     # Build the Docker image
     - name: Build and push Docker image
